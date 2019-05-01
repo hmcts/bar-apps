@@ -34,7 +34,7 @@ public class PaymentInstructionCsvRetrieveTest extends ComponentTestBase {
         PostalOrder approvedPostalOrderPaymentInstructionRequestY431 = postalOrderPaymentInstructionRequestWith()
             .payerName("Mr Payer Payer")
             .amount(533)
-            .currency("GBP").status("A")
+            .currency("GBP").status("R")
             .postalOrderNumber("000000").bgcNumber("123456").build();
 
 
@@ -107,7 +107,7 @@ public class PaymentInstructionCsvRetrieveTest extends ComponentTestBase {
         Card approvedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("A")
+            .currency("GBP").status("R")
             .authorizationCode("000000").build();
 
 
@@ -175,7 +175,7 @@ public class PaymentInstructionCsvRetrieveTest extends ComponentTestBase {
         Card approvedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("A")
+            .currency("GBP").status("R")
             .authorizationCode("000000").build();
 
 
@@ -245,7 +245,7 @@ public class PaymentInstructionCsvRetrieveTest extends ComponentTestBase {
         Card approvedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("A")
+            .currency("GBP").status("R")
             .authorizationCode("000000").build();
 
 
@@ -315,7 +315,7 @@ public class PaymentInstructionCsvRetrieveTest extends ComponentTestBase {
         Card approvedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("A")
+            .currency("GBP").status("R")
             .authorizationCode("000000").build();
 
 
@@ -385,7 +385,7 @@ public class PaymentInstructionCsvRetrieveTest extends ComponentTestBase {
         Card approvedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("A")
+            .currency("GBP").status("R")
             .authorizationCode("000000").build();
 
 
@@ -465,7 +465,7 @@ public class PaymentInstructionCsvRetrieveTest extends ComponentTestBase {
         Card approvedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("A")
+            .currency("GBP").status("R")
             .authorizationCode("000000").build();
 
 

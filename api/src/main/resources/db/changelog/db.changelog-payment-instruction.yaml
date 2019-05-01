@@ -874,3 +874,19 @@ databaseChangeLog:
       changes:
       - sql: >
           INSERT into site (id, description) values ('Y608', 'MEDWAY COUNTY COURT'), ('Y610', 'MILTON KEYNES COUNTY COURT'), ('Y431', 'BROMLEY COUNTY COURT');
+
+  - changeSet:
+      id: 38
+      author: sachi
+      changes:
+        - sql: >
+            INSERT into status values ('R','Reviewed');
+            INSERT into status values ('PR','Pending Review');
+            UPDATE payment_instruction_status SET status='R' where status='A';
+            UPDATE payment_instruction_status SET status='PR' where status='PA';
+            UPDATE payment_instruction SET status='R' where status='A';
+            UPDATE payment_instruction SET status='PR' where status='PA';
+            DELETE from status where status_id='A';
+            DELETE from status where status_id='PA';
+
+

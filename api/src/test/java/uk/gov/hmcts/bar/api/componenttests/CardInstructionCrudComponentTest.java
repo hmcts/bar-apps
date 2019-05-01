@@ -399,11 +399,11 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Card modifiedCardPaymentInstructionRequest = cardWith().payerName("Mr Payer Payer").amount(550).currency("GBP")
-				.status("PA").authorizationCode("qwerty").build();
+				.status("PR").authorizationCode("qwerty").build();
 
 		restActionsForFeeClerk.put("/allpay/1", modifiedCardPaymentInstructionRequest).andExpect(status().isOk());
 
-		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk())
+		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk())
 				.andExpect(content().contentType("application/json;charset=UTF-8")).andReturn().getResponse()
 				.getContentAsString();
 		JSONObject feeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
@@ -430,19 +430,19 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Card pendingApprovedCardPaymentInstructionRequest = cardWith().payerName("Mr Payer Payer").amount(550)
-				.currency("GBP").status("PA").authorizationCode("qwerty").build();
+				.currency("GBP").status("PR").authorizationCode("qwerty").build();
 
 		restActionsForFeeClerk.put("/allpay/1", pendingApprovedCardPaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk());
+		restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk());
 
 		Card approvedCardPaymentInstructionRequest = cardWith().payerName("Mr Payer Payer").amount(550).currency("GBP")
-				.status("A").authorizationCode("qwerty").build();
+				.status("R").authorizationCode("qwerty").build();
 
 		restActionsForSrFeeClerk.put("/allpay/1", approvedCardPaymentInstructionRequest).andExpect(status().isOk());
 
-		String jsonResponse = restActionsForDM.get("/users/pi-stats?status=A").andExpect(status().isOk())
+		String jsonResponse = restActionsForDM.get("/users/pi-stats?status=R").andExpect(status().isOk())
 				.andExpect(content().contentType("application/json;charset=UTF-8")).andReturn().getResponse()
 				.getContentAsString();
 		JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
@@ -475,15 +475,15 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Card pendingApprovedCardPaymentInstructionRequest = cardWith().payerName("Mr Payer Payer").amount(550)
-				.currency("GBP").status("PA").authorizationCode("qwerty").build();
+				.currency("GBP").status("PR").authorizationCode("qwerty").build();
 
 		restActionsForFeeClerk.put("/allpay/1", pendingApprovedCardPaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk());
+		restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk());
 
 		Card approvedCardPaymentInstructionRequest = cardWith().payerName("Mr Payer Payer").amount(550).currency("GBP")
-				.status("A").authorizationCode("qwerty").build();
+				.status("R").authorizationCode("qwerty").build();
 
 		restActionsForSrFeeClerk.put("/allpay/1", approvedCardPaymentInstructionRequest).andExpect(status().isOk());
 
@@ -518,15 +518,15 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Card pendingApprovedCardPaymentInstructionRequest = cardWith().payerName("Mr Payer Payer").amount(550)
-				.currency("GBP").status("PA").authorizationCode("qwerty").build();
+				.currency("GBP").status("PR").authorizationCode("qwerty").build();
 
 		restActionsForFeeClerk.put("/allpay/1", pendingApprovedCardPaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk());
+		restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk());
 
 		Card approvedCardPaymentInstructionRequest = cardWith().payerName("Mr Payer Payer").amount(550).currency("GBP")
-				.status("A").authorizationCode("qwerty").build();
+				.status("R").authorizationCode("qwerty").build();
 
 		restActionsForSrFeeClerk.put("/allpay/1", approvedCardPaymentInstructionRequest).andExpect(status().isOk());
 
@@ -536,7 +536,7 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
 		restActionsForDM.patch("/payment-instructions/1/reject", rejectedCardPaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=RDM&oldStatus=A")
+		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=RDM&oldStatus=R")
 				.andExpect(status().isOk()).andExpect(content().contentType("application/json;charset=UTF-8"))
 				.andReturn().getResponse().getContentAsString();
 		System.out.println(jsonResponse);
@@ -589,7 +589,7 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
         Card submittedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("PA")
+            .currency("GBP").status("PR")
             .authorizationCode("000000").build();
 
 
@@ -630,7 +630,7 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
         Card submittedCardPaymentInstructionRequest = cardWith()
             .payerName("Mr Payer Payer")
             .amount(600)
-            .currency("GBP").status("PA")
+            .currency("GBP").status("PR")
             .authorizationCode("000000").build();
 
 
@@ -645,7 +645,7 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
             .put("/cards/1", submittedCardPaymentInstructionRequest)
             .andExpect(status().isOk());
 
-        restActionsForFeeClerk.get("/payment-instructions/count?status=PA").andExpect(status().isOk())
+        restActionsForFeeClerk.get("/payment-instructions/count?status=PR").andExpect(status().isOk())
             .andExpect(body().as(Long.class, (count) -> {
                 assertThat(count.equals(1));
             }));

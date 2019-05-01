@@ -464,11 +464,11 @@ public class ChequeInstructionCrudComponentTest extends ComponentTestBase {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Cheque modifiedChequePaymentInstructionRequest = chequePaymentInstructionRequestWith()
-				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PA").chequeNumber("000000").build();
+				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PR").chequeNumber("000000").build();
 
 		restActionsForFeeClerk.put("/allpay/1", modifiedChequePaymentInstructionRequest).andExpect(status().isOk());
 
-		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk())
+		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk())
 				.andExpect(content().contentType("application/json;charset=UTF-8")).andReturn().getResponse()
 				.getContentAsString();
 		JSONObject feeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
@@ -495,19 +495,19 @@ public class ChequeInstructionCrudComponentTest extends ComponentTestBase {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Cheque pendingApprovedChequePaymentInstructionRequest = chequePaymentInstructionRequestWith()
-				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PA").chequeNumber("000000").build();
+				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PR").chequeNumber("000000").build();
 
 		restActionsForFeeClerk.put("/allpay/1", pendingApprovedChequePaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk());
+		restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk());
 
 		Cheque approvedChequePaymentInstructionRequest = chequePaymentInstructionRequestWith()
-				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("A").chequeNumber("000000").build();
+				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("R").chequeNumber("000000").build();
 
 		restActionsForSrFeeClerk.put("/allpay/1", approvedChequePaymentInstructionRequest).andExpect(status().isOk());
 
-		String jsonResponse = restActionsForDM.get("/users/pi-stats?status=A").andExpect(status().isOk())
+		String jsonResponse = restActionsForDM.get("/users/pi-stats?status=R").andExpect(status().isOk())
 				.andExpect(content().contentType("application/json;charset=UTF-8")).andReturn().getResponse()
 				.getContentAsString();
 		JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
@@ -535,15 +535,15 @@ public class ChequeInstructionCrudComponentTest extends ComponentTestBase {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Cheque pendingApprovedChequePaymentInstructionRequest = chequePaymentInstructionRequestWith()
-				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PA").chequeNumber("000000").build();
+				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PR").chequeNumber("000000").build();
 
 		restActionsForFeeClerk.put("/allpay/1", pendingApprovedChequePaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk());
+		restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk());
 
 		Cheque approvedChequePaymentInstructionRequest = chequePaymentInstructionRequestWith()
-				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("A").chequeNumber("000000").build();
+				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("R").chequeNumber("000000").build();
 
 		restActionsForSrFeeClerk.put("/allpay/1", approvedChequePaymentInstructionRequest).andExpect(status().isOk());
 
@@ -578,15 +578,15 @@ public class ChequeInstructionCrudComponentTest extends ComponentTestBase {
 		restActionsForFeeClerk.put("/payment-instructions/1", request).andExpect(status().isOk());
 
 		Cheque pendingApprovedChequePaymentInstructionRequest = chequePaymentInstructionRequestWith()
-				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PA").chequeNumber("000000").build();
+				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("PR").chequeNumber("000000").build();
 
 		restActionsForFeeClerk.put("/allpay/1", pendingApprovedChequePaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk());
+		restActionsForSrFeeClerk.get("/users/pi-stats?status=PR").andExpect(status().isOk());
 
 		Cheque approvedChequePaymentInstructionRequest = chequePaymentInstructionRequestWith()
-				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("A").chequeNumber("000000").build();
+				.payerName("Mr Payer Payer").amount(550).currency("GBP").status("R").chequeNumber("000000").build();
 
 		restActionsForSrFeeClerk.put("/allpay/1", approvedChequePaymentInstructionRequest).andExpect(status().isOk());
 
@@ -596,7 +596,7 @@ public class ChequeInstructionCrudComponentTest extends ComponentTestBase {
 		restActionsForDM.patch("/payment-instructions/1/reject", rejectedChequePaymentInstructionRequest)
 				.andExpect(status().isOk());
 
-		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=RDM&oldStatus=A")
+		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=RDM&oldStatus=R")
 				.andExpect(status().isOk()).andExpect(content().contentType("application/json;charset=UTF-8"))
 				.andReturn().getResponse().getContentAsString();
 		System.out.println(jsonResponse);

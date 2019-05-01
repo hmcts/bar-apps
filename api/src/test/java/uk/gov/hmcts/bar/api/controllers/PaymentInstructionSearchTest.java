@@ -114,7 +114,7 @@ public class PaymentInstructionSearchTest extends ComponentTestBase {
         DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
 
         restActions
-            .get("/users/1234/payment-instructions?status=RDM&oldStatus=A")
+            .get("/users/1234/payment-instructions?status=RDM&oldStatus=R")
             .andExpect(status().isOk())
             .andExpect(body().asListOf(CardPaymentInstruction.class, paymentInstructions -> {
                 Assert.assertTrue(paymentInstructions.size() == 1);

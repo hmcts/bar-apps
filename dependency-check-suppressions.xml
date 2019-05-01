@@ -188,9 +188,12 @@
         <cve>CVE-2018-8088</cve>
     </suppress>
     <suppress>
-        <notes>CVE-2018-1258: we do not use Spring Method Security, so this does not affect us. see https://pivotal.io/security/cve-2018-1258</notes>        
+        <notes>CVE-2018-1258: we do not use Spring Method Security, so this does not affect us. see https://pivotal.io/security/cve-2018-1258</notes>
         <cve>CVE-2018-1258</cve>
     </suppress>
-
+    <suppress>
+        <notes>CVE-2019-0232: Not a real threat for us currently. see https://community.pivotal.io/s/question/0D50e00005dK5Xz/hellowhen-your-team-will-be-released-new-security-patch-update-to-fix-your-tomcat-httpsbitly2xbmakuversions-affected900m1-to-9017-850-to-8539-700-to-7093cheers</notes>
+        <cve>CVE-2019-0232</cve>
+    </suppress>
 </suppressions>
 
