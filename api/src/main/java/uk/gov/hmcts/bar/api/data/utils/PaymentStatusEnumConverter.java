@@ -6,7 +6,14 @@ import java.beans.PropertyEditorSupport;
 
 public class PaymentStatusEnumConverter extends PropertyEditorSupport {
 	@Override
-	public void setAsText(final String text) {
-		setValue(PaymentStatusEnum.getPaymentStatusEnum(text));
-	}
+    public void setAsText(final String text) {
+        String modifiedText;
+        if (text.equals("PA"))
+            modifiedText = "PR";
+        else if (text.equals("A"))
+            modifiedText = "R";
+        else
+            modifiedText = text;
+        setValue(PaymentStatusEnum.getPaymentStatusEnum(modifiedText));
+    }
 }

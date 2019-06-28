@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.collections.MultiMap;
+import org.ff4j.FF4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Link;
@@ -51,19 +52,22 @@ public class PaymentInstructionController {
 
     private final FullRemissionService fullRemissionService;
 
+    private final FF4j ff4j;
+
     @Autowired
     public PaymentInstructionController(PaymentInstructionService paymentInstructionService,
                                         CaseFeeDetailService caseFeeDetailService,
                                         UnallocatedAmountService unallocatedAmountService,
                                         BarUserService barUserService,
                                         PayHubService payHubService,
-                                        FullRemissionService fullRemissionService) {
+                                        FullRemissionService fullRemissionService,FF4j ff4j) {
         this.paymentInstructionService = paymentInstructionService;
         this.caseFeeDetailService = caseFeeDetailService;
         this.unallocatedAmountService = unallocatedAmountService;
         this.barUserService = barUserService;
         this.payHubService = payHubService;
         this.fullRemissionService = fullRemissionService;
+        this.ff4j = ff4j;
     }
 
     @ApiOperation(value = "Get all current payment instructions", notes = "Get all current payment instructions for a given site.",
@@ -90,6 +94,9 @@ public class PaymentInstructionController {
         @RequestParam(name = "authorizationCode", required = false) String authorizationCode,
         @RequestParam(name = "oldStatus", required = false) String oldStatus) {
 
+        status = Util.convertStatusForBackend(status);
+        oldStatus = Util.convertStatusForBackend(oldStatus);
+
         List<PaymentInstruction> paymentInstructionList = null;
 
         if (checkAcceptHeaderForCsv(headers)){
@@ -103,7 +110,7 @@ public class PaymentInstructionController {
             paymentInstructionList = paymentInstructionService
                 .getAllPaymentInstructions(request.getBarUser(), paymentInstructionSearchCriteriaDto);
         }
-        return Util.updateStatusAndActionDisplayValue(paymentInstructionList);
+        return Util.updateStatusAndActionDisplayValue(paymentInstructionList,ff4j);
     }
 
     @ApiOperation(value = "Get all current payment instructions", notes = "Get all current payment instructions for a given site.",
@@ -131,6 +138,9 @@ public class PaymentInstructionController {
         @RequestParam(name = "bgcNumber", required = false) String bgcNumber,
         @RequestParam(name = "oldStatus", required = false) String oldStatus)  {
 
+        status = Util.convertStatusForBackend(status);
+        oldStatus = Util.convertStatusForBackend(oldStatus);
+
         List<PaymentInstruction> paymentInstructionList = null;
 
 		PaymentInstructionSearchCriteriaDto paymentInstructionSearchCriteriaDto = createPaymentInstructionCriteria(id,
@@ -141,7 +151,7 @@ public class PaymentInstructionController {
 				.getAllPaymentInstructions(request.getBarUser(), paymentInstructionSearchCriteriaDto);
 
 
-        return Util.updateStatusAndActionDisplayValue(paymentInstructionList);
+        return Util.updateStatusAndActionDisplayValue(paymentInstructionList,ff4j);
     }
 
     @ApiOperation(value = "Get the payment instruction", notes = "Get the payment instruction for the given id.")
@@ -154,6 +164,9 @@ public class PaymentInstructionController {
         PaymentInstruction paymentInstruction = paymentInstructionService.getPaymentInstruction(id, request.getBarUser().getSelectedSiteId());
         if (paymentInstruction == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if(Util.isFeatureConvertStatusForFrontendEnabled(ff4j)) {
+            paymentInstruction.setStatus(Util.convertStatusForFrontend((paymentInstruction.getStatus())));
         }
         return new ResponseEntity<>(paymentInstruction, HttpStatus.OK);
     }
@@ -196,6 +209,7 @@ public class PaymentInstructionController {
     public ResponseEntity<Void> updateCardInstruction(@PathVariable("id") Integer id,
                                                       @ApiParam(value="Card request", required=true) @Valid @RequestBody Card card,
                                                       BarWrappedHttpRequest request) {
+        card.setStatus(Util.convertStatusForBackend(card.getStatus()));
         paymentInstructionService.updatePaymentInstruction(request.getBarUser(), id,card);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -228,6 +242,7 @@ public class PaymentInstructionController {
     public ResponseEntity<Void> updateChequeInstruction(@PathVariable("id") Integer id,
                                                         @ApiParam(value="Cheque request",required=true) @Valid @RequestBody Cheque cheque,
                                                         BarWrappedHttpRequest request) {
+        cheque.setStatus(Util.convertStatusForBackend(cheque.getStatus()));
         paymentInstructionService.updatePaymentInstruction(request.getBarUser(), id,cheque);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -310,6 +325,7 @@ public class PaymentInstructionController {
     @PutMapping("/cash/{id}")
     public ResponseEntity<Void> updateCashInstruction(BarWrappedHttpRequest request,
                                                       @PathVariable("id") Integer id , @ApiParam(value="Cash request",required=true) @Valid @RequestBody Cash cash) {
+        cash.setStatus(Util.convertStatusForBackend(cash.getStatus()));
         paymentInstructionService.updatePaymentInstruction(request.getBarUser(), id,cash);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -343,6 +359,7 @@ public class PaymentInstructionController {
     @PutMapping("/postal-orders/{id}")
     public ResponseEntity<Void> updatePostalOrderInstruction(BarWrappedHttpRequest request,
                                                              @PathVariable("id") Integer id , @ApiParam(value="Postal order request",required=true) @Valid @RequestBody PostalOrder postalOrder) {
+        postalOrder.setStatus(Util.convertStatusForBackend(postalOrder.getStatus()));
         paymentInstructionService.updatePaymentInstruction(request.getBarUser(), id,postalOrder);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -375,6 +392,7 @@ public class PaymentInstructionController {
     @PutMapping("/allpay/{id}")
     public ResponseEntity<Void> updateAllPayInstruction(BarWrappedHttpRequest request,
                                                         @PathVariable("id") Integer id , @ApiParam(value="Allpay request",required=true) @Valid @RequestBody AllPay allpay) {
+        allpay.setStatus(Util.convertStatusForBackend(allpay.getStatus()));
         paymentInstructionService.updatePaymentInstruction(request.getBarUser(), id, allpay);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -398,6 +416,7 @@ public class PaymentInstructionController {
         }
         PaymentInstruction submittedPaymentInstruction = null;
         try {
+            paymentInstructionUpdateRequest.setStatus(Util.convertStatusForBackend(paymentInstructionUpdateRequest.getStatus()));
 			submittedPaymentInstruction = paymentInstructionService.submitPaymentInstruction(request.getBarUser(), id, paymentInstructionUpdateRequest);
 			response = new ResponseEntity<>(submittedPaymentInstruction, HttpStatus.OK);
 		} catch (PaymentProcessException e) {
@@ -459,7 +478,9 @@ public class PaymentInstructionController {
                                @RequestParam(name = "sentToPayhub", required = false, defaultValue = "false") boolean sentToPayhub) {
         MultiMap resultMap = null;
         String siteId = request.getBarUser().getSelectedSiteId();
+        status = PaymentStatusEnum.getPaymentStatusEnum(Util.convertStatusForBackend(status.dbKey()));
         if (oldStatus != null) {
+            oldStatus = PaymentStatusEnum.getPaymentStatusEnum(Util.convertStatusForBackend(oldStatus.dbKey()));
             resultMap = paymentInstructionService.getPaymentInstructionStatsByCurrentStatusGroupedByOldStatus(status.dbKey(),
                 oldStatus.dbKey(), siteId);
         } else {
@@ -481,6 +502,7 @@ public class PaymentInstructionController {
         @RequestParam(name = "startDate", required = false) @DateTimeFormat(pattern = "ddMMyyyy") LocalDate startDate,
         @RequestParam(name = "endDate", required = false) @DateTimeFormat(pattern = "ddMMyyyy") LocalDate endDate) {
 
+        status = Util.convertStatusForBackend(status);
         long count = 0;
         if (null == userId && null == startDate && null == endDate){
             count = paymentInstructionService.getNonResetPaymentInstructionsCount(status, request.getBarUser().getSelectedSiteId());
@@ -529,6 +551,8 @@ public class PaymentInstructionController {
         @RequestParam(name = "old_status", required = false) Optional<String> oldStatus,
         @RequestParam(name = "sentToPayhub", required = false, defaultValue = "false") boolean sentToPayhub) {
 
+        status = Util.convertStatusForBackend(status);
+        oldStatus = Util.convertOptionalStatusForBackend(oldStatus);
         MultiMap stats = paymentInstructionService.getPaymentInstructionsByUserGroupByActionAndType(id, status, oldStatus, sentToPayhub, request.getBarUser().getSelectedSiteId());
         Link link = linkTo(methodOn(PaymentInstructionController.class).getPaymentInstructionStatsByUserGroupByAction(request, id, status, oldStatus, sentToPayhub)).withSelfRel();
         return new Resource<>(stats, link);
@@ -613,5 +637,6 @@ public class PaymentInstructionController {
 	public void initBinder(final WebDataBinder webdataBinder) {
 		webdataBinder.registerCustomEditor(PaymentStatusEnum.class, new PaymentStatusEnumConverter());
 	}
+
 
 }

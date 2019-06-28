@@ -1,6 +1,8 @@
 package uk.gov.hmcts.bar.api.data.utils;
 
+import org.ff4j.FF4j;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import uk.gov.hmcts.bar.api.data.model.AllPayPaymentInstruction;
 import uk.gov.hmcts.bar.api.data.model.PaymentInstruction;
 import uk.gov.hmcts.bar.api.data.model.PaymentInstructionUpdateRequest;
@@ -11,11 +13,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UtilTest {
+
+    @InjectMocks
+    private Util util;
+
+
+
+    private FF4j ff4j = new FF4j().createFeature(Util.CONVERT_STATUS_FOR_FRONTEND_FEATURE_KEY).disable(Util.CONVERT_STATUS_FOR_FRONTEND_FEATURE_KEY);
+
 
 	@Test
 	public void whenPaymentInstructionWithNullPropertyValuesPassedIn_shouldReturnAllNullPropertyNames() {
@@ -27,12 +35,12 @@ public class UtilTest {
 
 	@Test
 	public void whenPaymentIntructionListPassed_shouldReturnSameListWithCorrectStatusDisplayForDraft() {
-		List<PaymentInstruction> piListModified = null;
+	    List<PaymentInstruction> piListModified = null;
 		List<PaymentInstruction> piList = new ArrayList<PaymentInstruction>();
 		PaymentInstruction pi = new AllPayPaymentInstruction();
 		pi.setStatus("D");
 		piList.add(pi);
-		piListModified = Util.updateStatusAndActionDisplayValue(piList);
+		piListModified = Util.updateStatusAndActionDisplayValue(piList,ff4j);
 		assertTrue(piListModified.get(0).getStatus().equals("Draft"));
 	}
 
@@ -43,7 +51,7 @@ public class UtilTest {
 		PaymentInstruction pi = new AllPayPaymentInstruction();
 		pi.setStatus("P");
 		piList.add(pi);
-		piListModified = Util.updateStatusAndActionDisplayValue(piList);
+		piListModified = Util.updateStatusAndActionDisplayValue(piList,ff4j);
 		assertTrue(piListModified.get(0).getStatus().equals("Pending"));
 	}
 

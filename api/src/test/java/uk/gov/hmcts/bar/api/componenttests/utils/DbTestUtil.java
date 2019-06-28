@@ -53,7 +53,7 @@ public final class DbTestUtil {
         "INSERT INTO payment_instruction_status (payment_instruction_id,status,bar_user_id,update_time) VALUES (1,'TTB','1234',{ts '2019-01-21 20:48:40.0'});" +
         "INSERT INTO payment_instruction_status (payment_instruction_id,status,bar_user_id,update_time) VALUES (2,'P','1234',{ts '2019-01-21 20:48:40.0'});" +
         "INSERT INTO payment_instruction_status (payment_instruction_id,status,bar_user_id,update_time) VALUES (3,'TTB','1234',{ts '2019-01-21 20:48:40.0'});" +
-        "INSERT INTO payment_instruction_status (payment_instruction_id,status,bar_user_id,update_time) VALUES (4,'A','1234',{ts '2019-01-21 20:48:40.0'});" +
+        "INSERT INTO payment_instruction_status (payment_instruction_id,status,bar_user_id,update_time) VALUES (4,'R','1234',{ts '2019-01-21 20:48:40.0'});" +
         "INSERT INTO payment_instruction_status (payment_instruction_id,status,bar_user_id,update_time) VALUES (4,'RDM','dm-manager',{ts '2019-01-21 20:48:40.0'});" +
         "INSERT INTO payment_instruction_status (payment_instruction_id,status,bar_user_id,update_time) VALUES (891,'TTB','1234',{ts '2019-01-21 20:48:40.0'});";
     /**

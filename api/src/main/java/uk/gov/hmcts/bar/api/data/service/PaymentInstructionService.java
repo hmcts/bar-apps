@@ -242,6 +242,7 @@ public class PaymentInstructionService {
 
     public MultiMap getPaymentStatsByUserGroupByType(String userId, String status, Optional<String> oldStatus, boolean sentToPayhub, String siteId) {
         String oldPaymentStatus = oldStatus.orElse(status);
+        oldPaymentStatus = Util.convertStatusForBackend(oldPaymentStatus);
         List<PaymentInstructionStats> results = paymentInstructionStatusRepository.getStatsByUserGroupByType(userId, status, oldPaymentStatus, sentToPayhub, siteId);
 
         return createHateoasResponse(results, userId, status, oldStatus.orElse(null));
@@ -249,12 +250,13 @@ public class PaymentInstructionService {
 
     public MultiMap getPaymentInstructionsByUserGroupByActionAndType(String userId, String status, Optional<String> oldStatus, boolean sentToPayhub, String siteId) {
         String oldPaymentStatus = oldStatus.orElse(status);
+        oldPaymentStatus = Util.convertStatusForBackend(oldPaymentStatus);
         List<PaymentInstructionStats> results =  paymentInstructionStatusRepository.getStatsByUserGroupByActionAndType(userId, status, oldPaymentStatus, sentToPayhub, siteId);
 
         return createHateoasResponse(results, userId, status, oldStatus.orElse(null));
     }
 
-    private MultiMap createHateoasResponse(List<PaymentInstructionStats> stats, String userId, String status, String oldStatus) {
+    private MultiMap createHateoasResponse(List<PaymentInstructionStats> stats, String userId,  String status, String oldStatus) {
         MultiMap paymentInstructionStatsGroupedByBgc = new MultiValueMap();
         stats.stream().forEach(stat -> {
             String bgcNumber = stat.getBgc() == null ? PaymentInstructionsSpecifications.IS_NULL : stat.getBgc();

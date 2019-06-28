@@ -2,6 +2,7 @@ package uk.gov.hmcts.bar.api.data.utils;
 
 import org.apache.commons.collections.MultiMap;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.ff4j.FF4j;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import uk.gov.hmcts.bar.api.data.enums.BarUserRoleEnum;
@@ -21,6 +22,8 @@ import java.util.stream.Stream;
 
 public interface Util {
 
+    String CONVERT_STATUS_FOR_FRONTEND_FEATURE_KEY = "convert-status-for-frontend";
+
     static String[] getNullPropertyNames(Object source) {
         final BeanWrapper wrappedSource = new BeanWrapperImpl(source);
         return Stream.of(wrappedSource.getPropertyDescriptors())
@@ -30,15 +33,24 @@ public interface Util {
     }
 
     static List<PaymentInstruction> updateStatusAndActionDisplayValue(
-        final List<PaymentInstruction> paymentInstructions) {
+        final List<PaymentInstruction> paymentInstructions,FF4j ff4j) {
+
         return paymentInstructions.stream().map(paymentInstruction -> {
+            String convertedStatus = null;
+            if (isFeatureConvertStatusForFrontendEnabled(ff4j)) {
+                convertedStatus = convertStatusForFrontend(paymentInstruction.getStatus());
+            }
+            else {
+                convertedStatus = paymentInstruction.getStatus();
+            }
             paymentInstruction
-                .setStatus(PaymentStatusEnum.getPaymentStatusEnum(paymentInstruction.getStatus()).displayValue());
+                .setStatus(PaymentStatusEnum.getPaymentStatusEnum(convertedStatus).displayValue());
             if (paymentInstruction.getAction() != null) {
                 paymentInstruction.setAction(paymentInstruction.getAction());
             }
             return paymentInstruction;
         }).collect(Collectors.toList());
+
     }
 
     static In<String> getInCriteriaWithStringValues(In<String> inCriteria, String columnName) {
@@ -129,6 +141,56 @@ public interface Util {
 		}
 		return paymentInstructionStatsMap;
 	}
+
+    static String convertStatusForBackend(String status){
+        String convertedStatus = null;
+        if(null != status) {
+            if (status.equals("PA"))
+                convertedStatus = "PR";
+            else if (status.equals("A"))
+                convertedStatus = "R";
+            else
+                convertedStatus = status;
+        }
+        return convertedStatus;
+
+    }
+
+    static Optional<String> convertOptionalStatusForBackend(Optional<String> status){
+        String convertedStatus = null;
+
+        if(status.isPresent()){
+            convertedStatus = status.get();
+            convertedStatus = convertStatusForBackend(convertedStatus);
+            return Optional.of(convertedStatus);
+        }
+
+        return status;
+
+    }
+
+
+    static String convertStatusForFrontend(String status){
+        String convertedStatus = null;
+        if(null != status) {
+            if (status.equals("PR"))
+                convertedStatus = "PA";
+            else if (status.equals("R"))
+                convertedStatus = "A";
+            else
+                convertedStatus = status;
+        }
+        return convertedStatus;
+
+    }
+
+    static boolean isFeatureConvertStatusForFrontendEnabled(FF4j ff4j){
+        boolean isEnabled = false;
+        isEnabled = ff4j.check(CONVERT_STATUS_FOR_FRONTEND_FEATURE_KEY);
+        return isEnabled;
+
+    }
+
 
 	interface StringUtils {
         static boolean isAnyBlank(java.lang.String...values) {

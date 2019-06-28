@@ -5,10 +5,9 @@ import java.util.Map;
 
 public enum PaymentStatusEnum {
 
-	DRAFT("D", "Draft"), PENDING("P", "Pending"), VALIDATED("V", "Validated"), PENDING_APPROVAL("PA",
-			"Pending Approval"), APPROVED("A", "Approved"), TRANSFERREDTOBAR("TTB",
-					"Transferred to bar"), REJECTED("REJ", "Rejected"), REJECTEDBYDM("RDM", "Rejected by DM"), COMPLETED("C","Completed");
-
+    DRAFT("D", "Draft"), PENDING("P", "Pending"), PENDING_APPROVAL("PA","Pending Approval"),APPROVED("A","Approved"),VALIDATED("V", "Validated"), PENDING_REVIEW("PR",
+        "Pending Review"), REVIEWED("R", "Reviewed"), TRANSFERREDTOBAR("TTB",
+        "Transferred to bar"), REJECTED("REJ", "Rejected"), REJECTEDBYDM("RDM", "Rejected by DM"), COMPLETED("C","Completed");
 	private static final Map<String, PaymentStatusEnum> paymentStatusEnumMap = new HashMap<>();
 
 	static {
@@ -49,7 +48,7 @@ public enum PaymentStatusEnum {
 
         return false;
     }
-    
+
     /*
      * Overridden the default toString() method for the sake of Swagger
      * @see java.lang.Enum#toString()
