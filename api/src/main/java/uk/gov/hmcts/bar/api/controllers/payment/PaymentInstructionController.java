@@ -89,7 +89,9 @@ public class PaymentInstructionController {
         @RequestParam(name = "action", required = false) String action,
         @RequestParam(name = "authorizationCode", required = false) String authorizationCode,
         @RequestParam(name = "oldStatus", required = false) String oldStatus,
-        @RequestParam(name = "payhubReference", required = false) String payhubReference) {
+        @RequestParam(name = "payhubReference", required = false) String payhubReference,
+        @RequestParam(name = "pageNumber", required = false) String pageNumber,
+        @RequestParam(name = "recordsPerPage", required = false) String recordsPerPage) {
 
         List<PaymentInstruction> paymentInstructionList = null;
 
@@ -99,7 +101,7 @@ public class PaymentInstructionController {
             PaymentInstructionSearchCriteriaDto paymentInstructionSearchCriteriaDto =
                 createPaymentInstructionCriteria(status, startDate, endDate, payerName, chequeNumber, postalOrderNumber,
                     dailySequenceId, allPayInstructionId, paymentType, action, caseReference, null, null,
-                    authorizationCode, oldStatus, payhubReference);
+                    authorizationCode, oldStatus, payhubReference,pageNumber,recordsPerPage);
 
             paymentInstructionList = paymentInstructionService
                 .getAllPaymentInstructions(request.getBarUser(), paymentInstructionSearchCriteriaDto);
@@ -131,13 +133,15 @@ public class PaymentInstructionController {
         @RequestParam(name = "piIds", required = false) String piIds,
         @RequestParam(name = "bgcNumber", required = false) String bgcNumber,
         @RequestParam(name = "oldStatus", required = false) String oldStatus,
-        @RequestParam(name = "payhubReference", required = false) String payhubReference)  {
+        @RequestParam(name = "payhubReference", required = false) String payhubReference,
+        @RequestParam(name = "pageNumber", required = false) String pageNumber,
+        @RequestParam(name = "recordsPerPage", required = false) String recordsPerPage)  {
 
         List<PaymentInstruction> paymentInstructionList = null;
 
 		PaymentInstructionSearchCriteriaDto paymentInstructionSearchCriteriaDto = createPaymentInstructionCriteria(id,
 				status, startDate, endDate, payerName, chequeNumber, postalOrderNumber, dailySequenceId,
-				allPayInstructionId, paymentType, action, caseReference, piIds, bgcNumber, null, oldStatus, payhubReference);
+				allPayInstructionId, paymentType, action, caseReference, piIds, bgcNumber, null, oldStatus, payhubReference,pageNumber,recordsPerPage);
 
 		paymentInstructionList = paymentInstructionService
 				.getAllPaymentInstructions(request.getBarUser(), paymentInstructionSearchCriteriaDto);
@@ -591,11 +595,14 @@ public class PaymentInstructionController {
         String bgcNumber,
         String authorizationCode,
         String oldStatus,
-        String payhubReference
+        String payhubReference,
+        String pageNumber,
+        String recordsPerPage
+        
     ){
         return createPaymentInstructionCriteria(null, status, startDate, endDate, payerName, chequeNumber,
             postalOrderNumber, dailySequenceId, allPayInstructionId, paymentType, action, caseReference, multiplePiIds, bgcNumber,
-            authorizationCode, oldStatus, payhubReference);
+            authorizationCode, oldStatus, payhubReference,pageNumber,recordsPerPage);
     }
 
     private PaymentInstructionSearchCriteriaDto createPaymentInstructionCriteria(
@@ -615,7 +622,9 @@ public class PaymentInstructionController {
         String bgcNumber,
         String authorizationCode,
         String oldStatus,
-        String payhubReference
+        String payhubReference,
+        String pageNumber,
+        String recordsPerPage
     ){
 		return PaymentInstructionSearchCriteriaDto.paymentInstructionSearchCriteriaDto().status(status).userId(userId)
 				.startDate(startDate == null ? null : startDate.atStartOfDay())
@@ -623,7 +632,7 @@ public class PaymentInstructionController {
 				.chequeNumber(chequeNumber).postalOrderNumer(postalOrderNumber).dailySequenceId(dailySequenceId)
 				.allPayInstructionId(allPayInstructionId).paymentType(paymentType).action(action)
 				.caseReference(caseReference).multiplePiIds(multiplePiIds).bgcNumber(bgcNumber)
-                .authorizationCode(authorizationCode).oldStatus(oldStatus).payhubReference(payhubReference).build();
+                .authorizationCode(authorizationCode).oldStatus(oldStatus).payhubReference(payhubReference).pageNumber(pageNumber).recordsPerPage(recordsPerPage).build();
     }
 
     private boolean checkAcceptHeaderForCsv(HttpHeaders headers){

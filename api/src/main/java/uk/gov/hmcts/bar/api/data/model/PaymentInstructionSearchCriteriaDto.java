@@ -37,5 +37,7 @@ public class PaymentInstructionSearchCriteriaDto {
     private String authorizationCode;
     private String oldStatus;
     private String payhubReference;
+    private String pageNumber;
+    private String recordsPerPage;
 
 }

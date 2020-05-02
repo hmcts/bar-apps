@@ -17,6 +17,7 @@ import uk.gov.hmcts.bar.api.audit.AuditRepository;
 import uk.gov.hmcts.bar.api.data.TestUtils;
 import uk.gov.hmcts.bar.api.data.enums.BarUserRoleEnum;
 import uk.gov.hmcts.bar.api.data.enums.PaymentActionEnum;
+import uk.gov.hmcts.bar.api.data.exceptions.BadRequestException;
 import uk.gov.hmcts.bar.api.data.exceptions.MissingSiteIdException;
 import uk.gov.hmcts.bar.api.data.exceptions.PaymentInstructionNotFoundException;
 import uk.gov.hmcts.bar.api.data.exceptions.PaymentProcessException;
@@ -408,7 +409,80 @@ public class PaymentInstructionServiceTest {
         assertEquals(Lists.newArrayList(piIteratorMock), retrievedPaymentInstructionList);
     }
 
+    @Test
+    public void shouldThrowError_whenPageNumberAndRecordsPerPageIsNotANumber()
+        throws BadRequestException {
 
+    	
+        when(paymentInstructionRepository.findAll(Mockito.any(Specification.class), Mockito.any(Pageable.class)))
+            .thenReturn(piPageMock);
+        when(piPageMock.iterator()).thenReturn(piIteratorMock);
+        PaymentInstructionSearchCriteriaDto paymentInstructionSearchCriteriaDto = paymentInstructionSearchCriteriaDtoBuilder
+            .chequeNumber("000000")
+            .pageNumber("abc")
+            .recordsPerPage("abc").build();
+          try
+          {
+        	 paymentInstructionService
+            .getAllPaymentInstructions(barUserMock, paymentInstructionSearchCriteriaDto);
+            fail("should fail here");
+          }
+          catch(BadRequestException e)
+          {
+        	  assertEquals("Invalid PageNumber or Invalid MaxRecords per page", e.getMessage());
+          }
+    }
+    
+    @Test
+    public void shouldReturnPaymentInstructionList_whenPageNumberAndRecordsPerPageIsNotNull()
+        throws Exception {
+
+        when(paymentInstructionRepository.findAll(Mockito.any(Specification.class), Mockito.any(Pageable.class)))
+            .thenReturn(piPageMock);
+        when(piPageMock.iterator()).thenReturn(piIteratorMock);
+        PaymentInstructionSearchCriteriaDto paymentInstructionSearchCriteriaDto = paymentInstructionSearchCriteriaDtoBuilder
+            .chequeNumber("000000")
+            .pageNumber("0")
+            .recordsPerPage("50").build();
+
+        List<PaymentInstruction> retrievedPaymentInstructionList = paymentInstructionService
+            .getAllPaymentInstructions(barUserMock, paymentInstructionSearchCriteriaDto);
+        assertEquals(Lists.newArrayList(piIteratorMock), retrievedPaymentInstructionList);
+    }
+
+    @Test
+    public void shouldReturnPaymentInstructionList_whenPageNumberIsNotNull()
+        throws Exception {
+
+        when(paymentInstructionRepository.findAll(Mockito.any(Specification.class), Mockito.any(Pageable.class)))
+            .thenReturn(piPageMock);
+        when(piPageMock.iterator()).thenReturn(piIteratorMock);
+        PaymentInstructionSearchCriteriaDto paymentInstructionSearchCriteriaDto = paymentInstructionSearchCriteriaDtoBuilder
+            .chequeNumber("000000")
+            .pageNumber("0")
+            .build();
+
+        List<PaymentInstruction> retrievedPaymentInstructionList = paymentInstructionService
+            .getAllPaymentInstructions(barUserMock, paymentInstructionSearchCriteriaDto);
+        assertEquals(Lists.newArrayList(piIteratorMock), retrievedPaymentInstructionList);
+    }
+    
+    @Test
+    public void shouldReturnPaymentInstructionList_whenRecordsPerPageIsNotNull()
+        throws Exception {
+
+        when(paymentInstructionRepository.findAll(Mockito.any(Specification.class), Mockito.any(Pageable.class)))
+            .thenReturn(piPageMock);
+        when(piPageMock.iterator()).thenReturn(piIteratorMock);
+        PaymentInstructionSearchCriteriaDto paymentInstructionSearchCriteriaDto = paymentInstructionSearchCriteriaDtoBuilder
+            .chequeNumber("000000")
+            .recordsPerPage("50").build();
+
+        List<PaymentInstruction> retrievedPaymentInstructionList = paymentInstructionService
+            .getAllPaymentInstructions(barUserMock, paymentInstructionSearchCriteriaDto);
+        assertEquals(Lists.newArrayList(piIteratorMock), retrievedPaymentInstructionList);
+    }
+    
     @Test
     public void shouldReturnPaymentInstructionList_whenGetAllPaymentInstructionsIsCalledWithOnlyStartDateAndEndDate()
         throws Exception {

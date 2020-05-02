@@ -2,8 +2,11 @@ package uk.gov.hmcts.bar.api.componenttests;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONParser;
+
+import uk.gov.hmcts.bar.api.componenttests.utils.DbTestUtil;
 import uk.gov.hmcts.bar.api.data.model.*;
 
 import java.time.LocalDate;
@@ -648,6 +651,40 @@ public class CardInstructionCrudComponentTest extends ComponentTestBase  {
         restActionsForFeeClerk.get("/payment-instructions/count?status=PA").andExpect(status().isOk())
             .andExpect(body().as(Long.class, (count) -> {
                 assertThat(count.equals(1));
+            }));
+    }
+    
+
+    @Test
+    public void getPaymentListForPageOneWithTwoRecords() throws Exception {
+    	DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        restActions
+            .get("/payment-instructions?pageNumber=0&recordsPerPage=2")
+            .andExpect(status().isOk())
+            .andExpect(body().asListOf(CardPaymentInstruction.class, paymentInstructions -> {
+                Assert.assertTrue(paymentInstructions.size() == 2);
+            }));
+    }
+    
+    @Test
+    public void getPaymentListForPageTwoWithTwoRecords() throws Exception {
+    	DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        restActions
+            .get("/payment-instructions?pageNumber=1&recordsPerPage=2")
+            .andExpect(status().isOk())
+            .andExpect(body().asListOf(CardPaymentInstruction.class, paymentInstructions -> {
+                Assert.assertTrue(paymentInstructions.size() == 2);
+            }));
+    }
+    
+    @Test
+    public void getPaymentListForPageOneWithOneRecord() throws Exception {
+        DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        restActions
+            .get("/users/1234/payment-instructions?pageNumber=0&recordsPerPage=1")
+            .andExpect(status().isOk())
+            .andExpect(body().asListOf(CardPaymentInstruction.class, paymentInstructions -> {
+                Assert.assertTrue(paymentInstructions.size() == 1);
             }));
     }
 

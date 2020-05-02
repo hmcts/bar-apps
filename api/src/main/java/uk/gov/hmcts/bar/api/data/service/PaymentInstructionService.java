@@ -21,6 +21,7 @@ import uk.gov.hmcts.bar.api.controllers.payment.PaymentInstructionController;
 import uk.gov.hmcts.bar.api.data.enums.BarUserRoleEnum;
 import uk.gov.hmcts.bar.api.data.enums.PaymentActionEnum;
 import uk.gov.hmcts.bar.api.data.enums.PaymentStatusEnum;
+import uk.gov.hmcts.bar.api.data.exceptions.BadRequestException;
 import uk.gov.hmcts.bar.api.data.exceptions.PaymentInstructionNotFoundException;
 import uk.gov.hmcts.bar.api.data.exceptions.PaymentProcessException;
 import uk.gov.hmcts.bar.api.data.model.*;
@@ -53,9 +54,10 @@ public class PaymentInstructionService {
     private static final Logger LOG = getLogger(PaymentInstructionService.class);
 
     private static final List<String> GROUPED_TYPES = Arrays.asList("CHEQUE", "POSTAL_ORDER");
-
+    
     private static final int PAGE_NUMBER = 0;
-    private static final int MAX_RECORDS_PER_PAGE = 200;
+    private static final int MAX_RECORDS_PER_PAGE = 50;
+
     private PaymentInstructionRepository paymentInstructionRepository;
     private PaymentInstructionStatusRepository paymentInstructionStatusRepository;
     private PaymentReferenceService paymentReferenceService;
@@ -112,8 +114,15 @@ public class PaymentInstructionService {
         paymentInstructionSearchCriteriaDto.setSiteId(barUser.getSelectedSiteId());
         PaymentInstructionsSpecifications<PaymentInstruction> paymentInstructionsSpecification = new PaymentInstructionsSpecifications<>(paymentInstructionSearchCriteriaDto,paymentTypeService);
         Sort sort = new Sort(Sort.Direction.DESC, "paymentDate");
-        Pageable pageDetails = PageRequest.of(PAGE_NUMBER, MAX_RECORDS_PER_PAGE, sort);
-
+        Pageable pageDetails = null;
+        if(paymentInstructionSearchCriteriaDto.getPageNumber()!= null && paymentInstructionSearchCriteriaDto.getRecordsPerPage() != null)
+        {
+         pageDetails = PageRequest.of(getIntegerValue(paymentInstructionSearchCriteriaDto.getPageNumber()), getIntegerValue(paymentInstructionSearchCriteriaDto.getRecordsPerPage()), sort);
+        }
+        else
+        {
+        	pageDetails = PageRequest.of(PAGE_NUMBER, MAX_RECORDS_PER_PAGE, sort);	
+        }
         Specification<PaymentInstruction> piSpecification = null;
         if (paymentInstructionSearchCriteriaDto.getMultiplePiIds() != null) {
             piSpecification = paymentInstructionsSpecification.getPaymentInstructionsMultipleIdSpecification();
@@ -124,7 +133,20 @@ public class PaymentInstructionService {
         return Lists.newArrayList(paymentInstructionRepository.findAll(piSpecification, pageDetails).iterator());
     }
 
-    public long getPaymentInstructionsCount(PaymentInstructionStatusCriteriaDto paymentInstructionStatusCriteriaDto) {
+    private int getIntegerValue(String valueToConvert) {
+    	int value = 0;
+	    try
+	    {
+		value = Integer.parseInt(valueToConvert);
+		}
+	    catch(NumberFormatException e)
+	    {
+	    	throw new BadRequestException("Invalid PageNumber or Invalid MaxRecords per page");
+	    }
+		return value;
+	}
+
+	public long getPaymentInstructionsCount(PaymentInstructionStatusCriteriaDto paymentInstructionStatusCriteriaDto) {
         PaymentInstructionStatusSpecifications<PaymentInstructionStatus> paymentInstructionStatusSpecification = new PaymentInstructionStatusSpecifications(paymentInstructionStatusCriteriaDto);
         Specification<PaymentInstructionStatus>  pisSpecification = paymentInstructionStatusSpecification.getPaymentInstructionStatusSpecification();
         return paymentInstructionStatusRepository.count(pisSpecification);
@@ -287,7 +309,7 @@ public class PaymentInstructionService {
         return linkTo(methodOn(PaymentInstructionController.class)
             .getPaymentInstructionsByIdamId(null, userId, status,
                 null, null, null, null, null,
-                null, null, null, paymentType, action, null, bgcNumber, oldStatus,null)
+                null, null, null, paymentType, action, null, bgcNumber, oldStatus,null,null,null)
         ).withRel(rel);
     }
 
