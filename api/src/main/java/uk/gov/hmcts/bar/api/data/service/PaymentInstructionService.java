@@ -276,7 +276,7 @@ public class PaymentInstructionService {
                 resource.add(groupedLink.expand());
             }
 
-            paymentInstructionStatsGroupedByBgc.put(stat.getBgc() == null ? "0" : stat.getBgc(), resource);
+            paymentInstructionStatsGroupedByBgc.put(stat.getBgc() == null || stat.getBgc().equals("")  ? "0" : stat.getBgc(), resource);
         });
         return paymentInstructionStatsGroupedByBgc;
     }
