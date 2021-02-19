@@ -10,7 +10,10 @@ import org.springframework.web.filter.GenericFilterBean;
 import uk.gov.hmcts.bar.api.data.model.BarUser;
 import uk.gov.hmcts.bar.api.data.service.BarUserService;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,7 +27,7 @@ public class SiteValidationFilter extends GenericFilterBean {
     private final BarUserService barUserService;
 
     private static final String[] excludeUrlPatterns = {"/swagger-ui.html", "/webjars/springfox-swagger-ui/**", "/swagger-resources/**",
-        "/v2/**", "/health","/health/liveness", "/payment-types", "/info", "/sites/**"};
+        "/v2/**", "/health","/health/liveness", "/payment-types", "/info", "/sites/**", "/favicon.ico"};
 
     private static AntPathMatcher pathMatcher = new AntPathMatcher();
 
