@@ -1,7 +1,7 @@
 package uk.gov.hmcts.bar.api.auth;
 
 import uk.gov.hmcts.bar.api.data.model.BarUser;
-import uk.gov.hmcts.reform.auth.checker.spring.useronly.UserDetails;
+import uk.gov.hmcts.bar.api.data.model.UserDetails;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

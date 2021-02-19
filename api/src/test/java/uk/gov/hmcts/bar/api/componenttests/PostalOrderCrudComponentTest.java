@@ -9,6 +9,7 @@ import uk.gov.hmcts.bar.api.data.model.CaseFeeDetailRequest;
 import uk.gov.hmcts.bar.api.data.model.PaymentInstructionUpdateRequest;
 import uk.gov.hmcts.bar.api.data.model.PostalOrder;
 import uk.gov.hmcts.bar.api.data.model.PostalOrderPaymentInstruction;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -429,10 +430,11 @@ public class PostalOrderCrudComponentTest extends ComponentTestBase {
         String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk())
             .andExpect(content().contentType("application/json")).andReturn().getResponse()
             .getContentAsString();
+        UserInfo userInfoForFeeClerk = restActionsForFeeClerk.getUserInfoForRestAction();
         JSONObject feeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
-            .get("fee-clerk")).get(0);
-        assertEquals("fee-clerk-fn fee-clerk-ln",feeClerk.get("bar_user_full_name"));
-        assertEquals( 1,feeClerk.get("count_of_payment_instruction_in_specified_status"));
+            .get(userInfoForFeeClerk.getUid())).get(0);
+        assertEquals(userInfoForFeeClerk.getGivenName() + " " + userInfoForFeeClerk.getFamilyName(), feeClerk.get("bar_user_full_name"));
+        assertEquals(1, feeClerk.get("count_of_payment_instruction_in_specified_status"));
     }
 
     @Test
@@ -473,10 +475,11 @@ public class PostalOrderCrudComponentTest extends ComponentTestBase {
         String jsonResponse = restActionsForDM.get("/users/pi-stats?status=A").andExpect(status().isOk())
             .andExpect(content().contentType("application/json")).andReturn().getResponse()
             .getContentAsString();
+        UserInfo userInfoSrFeeClerk = restActionsForSrFeeClerk.getUserInfoForRestAction();
         JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
-            .get("sr-fee-clerk")).get(0);
-        assertEquals( "sr-fee-clerk-fn sr-fee-clerk-ln",srFeeClerk.get("bar_user_full_name"));
-        assertEquals( 1,srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
+            .get(userInfoSrFeeClerk.getUid())).get(0);
+        assertEquals(userInfoSrFeeClerk.getGivenName() + " " + userInfoSrFeeClerk.getFamilyName(), srFeeClerk.get("bar_user_full_name"));
+        assertEquals(1, srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
     }
 
     @Test
@@ -573,10 +576,11 @@ public class PostalOrderCrudComponentTest extends ComponentTestBase {
             .andExpect(status().isOk()).andExpect(content().contentType("application/json"))
             .andReturn().getResponse().getContentAsString();
         System.out.println(jsonResponse);
+        UserInfo userInfoSrFeeClerk = restActionsForSrFeeClerk.getUserInfoForRestAction();
         JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
-            .get("sr-fee-clerk")).get(0);
-        assertEquals( "sr-fee-clerk-fn sr-fee-clerk-ln",srFeeClerk.get("bar_user_full_name"));
-        assertEquals( 1,srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
+            .get(userInfoSrFeeClerk.getUid())).get(0);
+        assertEquals(userInfoSrFeeClerk.getGivenName() + " " + userInfoSrFeeClerk.getFamilyName(), srFeeClerk.get("bar_user_full_name"));
+        assertEquals(1, srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
     }
 
     @Test
@@ -651,11 +655,12 @@ public class PostalOrderCrudComponentTest extends ComponentTestBase {
             .get("/users/pi-stats/count?startDate=" + startDate + "&endDate=" + endDate + "&status=D")
             .andExpect(status().isOk()).andExpect(content().contentType("application/json"))
             .andReturn().getResponse().getContentAsString();
+        UserInfo userInfoBarPostClerk = restActions.getUserInfoForRestAction();
         JSONObject seniorFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
-            .get("1234")).get(0);
+            .get(userInfoBarPostClerk.getUid())).get(0);
 
-        assertEquals(1,seniorFeeClerk.get("count_of_payment_instruction_in_specified_status"));
-        assertEquals("bar_post_clerk",seniorFeeClerk.get("bar_user_role"));
+        assertEquals(1, seniorFeeClerk.get("count_of_payment_instruction_in_specified_status"));
+        assertEquals("bar-post-clerk", seniorFeeClerk.get("bar_user_role"));
     }
 
     @Test

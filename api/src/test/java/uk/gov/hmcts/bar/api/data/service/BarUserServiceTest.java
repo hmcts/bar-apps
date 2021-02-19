@@ -22,9 +22,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
+import uk.gov.hmcts.bar.api.componenttests.ComponentTestBase;
 import uk.gov.hmcts.bar.api.data.model.BarUser;
+import uk.gov.hmcts.bar.api.data.model.UserDetails;
 import uk.gov.hmcts.bar.api.data.repository.BarUserRepository;
-import uk.gov.hmcts.reform.auth.checker.spring.useronly.UserDetails;
+import uk.gov.hmcts.bar.api.security.utils.SecurityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -51,16 +53,19 @@ public class BarUserServiceTest {
     @Mock
     private CacheManager cacheManager;
 
+    @Mock
+    private SecurityUtils securityUtils;
+
     private SecurityContext securityContext;
     private BarUser barUser;
 
-    private String siteApi = "http://localhost:23444";
+    private String siteApi = "http://localhost:23445";
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         when(cacheManager.getCache(Mockito.anyString())).thenReturn(new ConcurrentMapCache("barusers"));
-        barUserService = new BarUserService(barUserRepository, httpClient, siteApi, cacheManager);
+        barUserService = new BarUserService(barUserRepository, httpClient, siteApi, cacheManager, securityUtils);
 
 
         Authentication authentication = new Authentication() {
@@ -118,15 +123,16 @@ public class BarUserServiceTest {
     @Test(expected = AccessDeniedException.class)
     public void whenSecurityContextIsInvalid_shouldReceiveAccessDeniedException() {
         SecurityContextHolder.setContext(new SecurityContextImpl());
-
+        when(securityUtils.getUserInfo()).thenReturn(ComponentTestBase.getUserInfoBasedOnUID_Roles(null,"invalid-role"));
         barUserService.getCurrentUserId();
     }
 
     @Test
     public void whenSecurityContextIsValid_shouldGetUserId(){
         SecurityContextHolder.setContext(securityContext);
+        when(securityUtils.getUserInfo()).thenReturn(ComponentTestBase.getUserInfoBasedOnUID_Roles("Valid-UID","bar-post-clerk"));
 
-        assertEquals("username", barUserService.getCurrentUserId());
+        assertEquals("Valid-UID", barUserService.getCurrentUserId());
     }
 
     @Test
@@ -200,7 +206,7 @@ public class BarUserServiceTest {
         when(httpClient.execute(any(HttpGet.class))).thenAnswer(invocation -> {
             HttpGet httpGet = invocation.getArgument(0);
             assertThat(httpGet.getMethod(), Is.is("GET"));
-            assertThat(httpGet.getURI().toString(), Is.is("http://localhost:23444/sites/siteId/users/user@gmail.com"));
+            assertThat(httpGet.getURI().toString(), Is.is("http://localhost:23445/sites/siteId/users/user@gmail.com"));
             assertThat(httpGet.getHeaders("Authorization")[0].getValue(), Is.is("this_is_a_user_token"));
             return new SiteHttpResponse(200, "true");
         });

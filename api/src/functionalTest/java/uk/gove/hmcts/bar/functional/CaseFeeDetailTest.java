@@ -24,7 +24,7 @@ public class CaseFeeDetailTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " + authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         HashMap createdPayment = createCardPaymentInstruction(paymentInstructionPayload.toString(), token, Sites.Y431.name()).getBody().as(HashMap.class);
 
         JSONObject caseFeeDetailPayLoad = new JSONObject()
@@ -56,7 +56,7 @@ public class CaseFeeDetailTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " + authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         HashMap createdPayment = createCardPaymentInstruction(paymentInstructionPayload.toString(), token, Sites.Y431.name()).getBody().as(HashMap.class);
 
         JSONObject caseFeeDetailPayLoad = new JSONObject()
@@ -89,7 +89,7 @@ public class CaseFeeDetailTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         HashMap createdPayment = createCardPaymentInstruction(paymentInstructionPayload.toString(), token, Sites.Y431.name()).getBody().as(HashMap.class);
 
         JSONObject caseFeeDetailPayLoad = new JSONObject()
@@ -132,7 +132,7 @@ public class CaseFeeDetailTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         HashMap createdPayment = createCardPaymentInstruction(paymentInstructionPayload.toString(), token, Sites.Y431.name()).getBody().as(HashMap.class);
 
         JSONObject caseFeeDetailPayLoad = new JSONObject()

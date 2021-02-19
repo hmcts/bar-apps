@@ -23,7 +23,7 @@ public class ReferenceDataTest extends FunctionalTest {
 
     @Test
     public void testReturnAvailableActions() {
-        String token = authenticatorClient.authenticate(users.get(Roles.DELIVERY_MANAGER_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.DELIVERY_MANAGER_Y431), password);
         given()
             .relaxedHTTPSValidation()
             .header(CONTENT_TYPE, "application/json")

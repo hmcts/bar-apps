@@ -22,7 +22,7 @@ public class PaymentInstructionCreationTest extends FunctionalTest {
             .put("currency", "GBP")
             .put("authorization_code", "123456")
             .put("site_id", Sites.Y610.name());
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         Response response = createCardPaymentInstruction(payload.toString(), token, Sites.Y431.name());
         response.then().statusCode(201);
         Assert.assertEquals(Sites.Y431.name(), response.as(HashMap.class).get("site_id"));
@@ -36,7 +36,7 @@ public class PaymentInstructionCreationTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         createCardPaymentInstruction(payload.toString(), token, Sites.Y610.name()).then()
             .statusCode(403);
     }

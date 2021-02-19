@@ -50,8 +50,7 @@ dependencies {
     compile group: 'uk.gov.hmcts.reform', name: 'logging', version: javaLoggingVersion
   	compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: javaLoggingVersion
   	compile group: 'uk.gov.hmcts.reform', name: 'logging-spring', version: javaLoggingVersion
-    compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.0.0'
-
+    compile group: 'uk.gov.hmcts.reform', name: 'service-auth-provider-client', version: '3.1.1'
     // redefining with version 2.4.1 as applicationinsights-agent-2.5.0 has an open issue
     // https://github.com/glowroot/instrumentation/issues/1
     compile group: 'com.microsoft.azure', name: 'applicationinsights-logging-logback', version: appInsightsVersion
@@ -77,9 +76,9 @@ dependencies {
 
     compile 'io.springfox:springfox-swagger2'
     compile 'io.springfox:springfox-swagger-ui'
-    compile ('uk.gov.hmcts.reform.auth:auth-checker-lib') {
+    /*compile ('uk.gov.hmcts.reform.auth:auth-checker-lib') {
         exclude(module: 'java-logging-spring')
-    }
+    }*/
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'com.fasterxml.jackson.core:jackson-annotations'
     compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
@@ -87,7 +86,6 @@ dependencies {
     compile 'org.hibernate:hibernate-validator'
     compile 'commons-beanutils:commons-beanutils'
 
-    compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.4'
     compile group: 'uk.gov.hmcts.reform', name: 'properties-volume-spring-boot-starter', version:'0.0.4'
     compile group: 'org.springframework.plugin', name: 'spring-plugin-core', version: '1.2.0.RELEASE'
     compile(group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '1.0.4.RELEASE') {
@@ -119,9 +117,11 @@ dependencies {
 
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     functionalTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
+    functionalTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     smokeTestCompileOnly group: 'org.projectlombok', name: 'lombok', version: versions.lombok
     smokeTestAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: versions.lombok
 
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.3.0.RELEASE'
 }
 
 test {

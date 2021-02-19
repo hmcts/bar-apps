@@ -9,15 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.hmcts.bar.api.data.model.BarUser;
 import uk.gov.hmcts.bar.api.data.repository.BarUserRepository;
 import uk.gov.hmcts.bar.api.data.utils.Util;
-import uk.gov.hmcts.reform.auth.checker.spring.useronly.UserDetails;
+import uk.gov.hmcts.bar.api.security.utils.SecurityUtils;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -33,14 +31,18 @@ public class BarUserService {
     private final Cache cache;
 
     @Autowired
+    private SecurityUtils securityUtils;
+
+    @Autowired
     public BarUserService(BarUserRepository barUserRepository,
                           CloseableHttpClient httpClient,
                           @Value("${site.api.url}") String siteApiUrl,
-                          CacheManager cacheManager){
+                          CacheManager cacheManager, SecurityUtils securityUtils){
         this.barUserRepository = barUserRepository;
         this.httpClient = httpClient;
         this.siteApiUrl = siteApiUrl;
         this.cache = cacheManager.getCache("barusers");
+        this.securityUtils = securityUtils;
     }
 
     public BarUser saveUser(@NotNull BarUser barUser) {
@@ -55,12 +57,9 @@ public class BarUserService {
     }
 
     public String getCurrentUserId() {
-        Optional<String> userId = Optional.empty();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            userId = Optional.ofNullable(userDetails.getUsername());
-        }
+        Optional<String> userId;
+        UserInfo userInfo = securityUtils.getUserInfo();
+        userId = Optional.ofNullable(userInfo.getUid());
         return userId.orElseThrow(() -> new AccessDeniedException("failed to identify user"));
 	}
 

@@ -1,3 +1,4 @@
+/*
 package uk.gov.hmcts.bar.api.configuration;
 
 import org.apache.http.client.HttpClient;
@@ -63,3 +64,4 @@ public class AuthCheckerConfiguration {
         return filter;
     }
 }
+*/

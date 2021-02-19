@@ -82,7 +82,7 @@ public abstract class FunctionalTest {
         given()
             .relaxedHTTPSValidation()
             .header(CONTENT_TYPE, "application/json")
-            .header("Authorization", token)
+            .header("Authorization", "Bearer "+ token)
             .header("SiteId", siteId)
             .when()
             .post("/sites/" + siteId + "/users/" + email);

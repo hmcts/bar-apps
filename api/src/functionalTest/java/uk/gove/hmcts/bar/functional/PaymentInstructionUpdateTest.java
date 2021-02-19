@@ -24,7 +24,7 @@ public class PaymentInstructionUpdateTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         HashMap createdPayment = createCardPaymentInstruction(payload.toString(), token, Sites.Y431.name()).getBody().as(HashMap.class);
 
         payload = new JSONObject()
@@ -49,7 +49,7 @@ public class PaymentInstructionUpdateTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         HashMap createdPayment = createCardPaymentInstruction(payload.toString(), token, Sites.Y431.name()).getBody().as(HashMap.class);
 
         payload = new JSONObject()
@@ -75,10 +75,10 @@ public class PaymentInstructionUpdateTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y610), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y610), password);
         HashMap createdPayment = createCardPaymentInstruction(payload.toString(), token, Sites.Y610.name()).getBody().as(HashMap.class);
 
-        token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         payload = new JSONObject()
             .put("payer_name", "Jane Doe")
             .put("status", "P");
@@ -104,7 +104,7 @@ public class PaymentInstructionUpdateTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y431), password);
         HashMap createdPayment = createCardPaymentInstruction(payload.toString(), token, Sites.Y431.name()).getBody().as(HashMap.class);
 
         // Add fee
@@ -135,7 +135,7 @@ public class PaymentInstructionUpdateTest extends FunctionalTest {
             .put("status", "D")
             .put("currency", "GBP")
             .put("authorization_code", "123456");
-        String token = authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y610), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.FEE_CLERK_Y610), password);
         HashMap createdPayment = createCardPaymentInstruction(payload.toString(), token, Sites.Y610.name()).getBody().as(HashMap.class);
 
         // Add fee

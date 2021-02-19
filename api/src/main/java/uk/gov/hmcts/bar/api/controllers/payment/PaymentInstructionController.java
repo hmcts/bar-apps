@@ -24,7 +24,6 @@ import uk.gov.hmcts.bar.api.data.service.*;
 import uk.gov.hmcts.bar.api.data.utils.PaymentStatusEnumConverter;
 import uk.gov.hmcts.bar.api.data.utils.Util;
 import uk.gov.hmcts.bar.api.integration.payhub.service.PayHubService;
-import uk.gov.hmcts.reform.auth.checker.core.user.UserRequestAuthorizer;
 
 import javax.validation.Valid;
 import java.time.*;
@@ -564,7 +563,7 @@ public class PaymentInstructionController {
                                                              @PathVariable(name = "timestamp", required = false)
                                                              Optional<Long> reportTimestamp,
                                                              BarWrappedHttpRequest request)  {
-        String bearerToken = headers.getFirst(UserRequestAuthorizer.AUTHORISATION);
+        String bearerToken = headers.getFirst("Authorization");
         LocalDateTime reportDate;
         if (!reportTimestamp.isPresent()) {
             reportDate = LocalDateTime.now();

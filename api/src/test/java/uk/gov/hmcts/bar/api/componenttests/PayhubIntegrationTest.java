@@ -48,7 +48,7 @@ public class PayhubIntegrationTest extends ComponentTestBase {
    @Test
     public void testSendPaymentInstrucitonToPayhub() throws Exception {
         DbTestUtil.insertBGCNumber(getWebApplicationContext());
-        DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), null);
         restActionsForDM
             .get("/payment-instructions/send-to-payhub/")
             .andExpect(status().isOk())
@@ -62,7 +62,7 @@ public class PayhubIntegrationTest extends ComponentTestBase {
     public void testSendPaymentInstrucitonToPayhubWithReportDate() throws Exception {
         Long reportDate = LocalDateTime.now().toInstant(ZoneOffset.UTC).toEpochMilli();
         DbTestUtil.insertBGCNumber(getWebApplicationContext());
-        DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), null);
         restActionsForDM
             .get("/payment-instructions/send-to-payhub/" + reportDate)
             .andExpect(status().isOk())
@@ -76,7 +76,7 @@ public class PayhubIntegrationTest extends ComponentTestBase {
         public void testSendPaymentInstrucitonToPayhubWithInvalidReportDate() throws Exception {
             Long reportDate = LocalDateTime.now().plusDays(1).toInstant(ZoneOffset.UTC).toEpochMilli();
             DbTestUtil.insertBGCNumber(getWebApplicationContext());
-            DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+            DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), null);
             restActionsForDM
                 .get("/payment-instructions/send-to-payhub/" + reportDate)
                 .andExpect(status().isBadRequest());
@@ -84,8 +84,9 @@ public class PayhubIntegrationTest extends ComponentTestBase {
 
         @Test
         public void testSendPaymentInstrucitonToPayhub_withWrongUser() throws Exception {
+            String userId = restActions.getUserInfoForRestAction().getUid();
             DbTestUtil.insertBGCNumber(getWebApplicationContext());
-            DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+            DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), userId);
             restActions
                 .get("/payment-instructions/send-to-payhub/")
                 .andExpect(status().isForbidden());
@@ -95,7 +96,7 @@ public class PayhubIntegrationTest extends ComponentTestBase {
         public void testSendPaymentInstrucitonWhenFeatureIsOff() throws Exception {
             DbTestUtil.insertBGCNumber(getWebApplicationContext());
             DbTestUtil.toggleSendToPayhub(getWebApplicationContext(), false);
-            DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+            DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), null);
             restActionsForDM
                 .get("/payment-instructions/send-to-payhub/")
                 .andExpect(status().isBadRequest())

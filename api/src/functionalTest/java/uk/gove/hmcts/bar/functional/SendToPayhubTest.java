@@ -19,7 +19,7 @@ public class SendToPayhubTest extends FunctionalTest {
 
     @Test
     public void testSendPaymentToPayhub() throws JSONException {
-        String token = authenticatorClient.authenticate(users.get(Roles.DELIVERY_MANAGER_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.DELIVERY_MANAGER_Y431), password);
 
         // create payment
         Map createdPayment = createPayment(token);
@@ -45,7 +45,7 @@ public class SendToPayhubTest extends FunctionalTest {
 
     @Test
     public void testSendFullRemissionToPayhub() throws JSONException {
-        String token = authenticatorClient.authenticate(users.get(Roles.DELIVERY_MANAGER_Y431), password);
+        String token = "Bearer " +  authenticatorClient.authenticate(users.get(Roles.DELIVERY_MANAGER_Y431), password);
         // create full-remission
         Map createdFullRemission = createFullRemission(token);
 

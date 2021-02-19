@@ -44,7 +44,8 @@ public class AppConfig implements WebMvcConfigurer {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
         cacheManager.setCaches(Arrays.asList(
             new ConcurrentMapCache("barusers"),
-            new ConcurrentMapCache("paymentTypes")
+            new ConcurrentMapCache("paymentTypes"),
+            new ConcurrentMapCache("userInfoCache")
         ));
         return cacheManager;
     }

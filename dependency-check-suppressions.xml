@@ -19,5 +19,21 @@
         <notes>Transitive dependency of spring boot version</notes>
         <cve>CVE-2020-5421</cve>
     </suppress>
+
+    <suppress until="2021-03-14">
+        <notes>oauth2-oidc-sdk vulnerabilities appearing even for latest version. False positive reported at https://github.com/jeremylong/DependencyCheck/issues/1658</notes>
+        <cve>CVE-2007-1651</cve>
+        <cve>CVE-2007-1652</cve>
+    </suppress>
+
+    <suppress until="2021-03-14">
+        <notes><![CDATA[
+            This CVE is related to file type tag parsing. However, the associated CVE seems to be a false positive on the lang-tag jar.
+        ]]></notes>
+        <cve>CVE-2020-29242</cve>
+        <cve>CVE-2020-29243</cve>
+        <cve>CVE-2020-29244</cve>
+        <cve>CVE-2020-29245</cve>
+    </suppress>
     <!-- Supression Group ends here -->
 </suppressions>

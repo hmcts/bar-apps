@@ -15,7 +15,7 @@ public class PaymentInstructionUserFilterTest extends ComponentTestBase {
     @Test
     public void whenNoUsersInPath_thenGetAllPaymentInstructions() throws Exception {
         DbTestUtil.insertBGCNumber(getWebApplicationContext());
-        DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), null);
         restActions
             .get("/payment-instructions")
             .andExpect(status().isOk())
@@ -28,9 +28,9 @@ public class PaymentInstructionUserFilterTest extends ComponentTestBase {
     @Test
     public void whenUsersInPath_thenFilterPaymentInstructionResultsByUser() throws Exception {
         DbTestUtil.insertBGCNumber(getWebApplicationContext());
-        DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), restActions.getUserInfoForRestAction().getUid());
         restActions
-            .get("/users/1234/payment-instructions")
+            .get("/users/" + restActions.getUserInfoForRestAction().getUid() + "/payment-instructions")
             .andExpect(status().isOk())
             .andExpect(body().asListOf(CardPaymentInstruction.class, paymentInstructions -> {
                 assertTrue(paymentInstructions.size() == 3);
@@ -40,10 +40,10 @@ public class PaymentInstructionUserFilterTest extends ComponentTestBase {
     @Test
     public void testGettingPaymentInstructionsForUserByAction() throws Exception {
         DbTestUtil.insertBGCNumber(getWebApplicationContext());
-        DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), restActions.getUserInfoForRestAction().getUid());
 
         restActions
-            .get("/users/1234/payment-instructions?action=Process")
+            .get("/users/" + restActions.getUserInfoForRestAction().getUid() + "/payment-instructions?action=Process")
             .andExpect(status().isOk())
             .andExpect(body().as(List.class, item -> {
                 assertTrue(item.size() == 3);
@@ -60,7 +60,7 @@ public class PaymentInstructionUserFilterTest extends ComponentTestBase {
     @Test
     public void testGettingPaymentInstructionsForUserByActionAndBgcNumber() throws Exception {
         DbTestUtil.insertBGCNumber(getWebApplicationContext());
-        DbTestUtil.insertPaymentInstructions(getWebApplicationContext());
+        DbTestUtil.insertPaymentInstructions(getWebApplicationContext(), null);
 
         restActions
             .get("/users/4321/payment-instructions?action=Process&bgcNumber=isNull")

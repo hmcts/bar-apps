@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONParser;
 import uk.gov.hmcts.bar.api.data.enums.PaymentActionEnum;
 import uk.gov.hmcts.bar.api.data.model.*;
+import uk.gov.hmcts.reform.idam.client.models.UserInfo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -479,10 +480,11 @@ public class AllPayInstructionCrudComponentTest extends ComponentTestBase {
 		String jsonResponse = restActionsForSrFeeClerk.get("/users/pi-stats?status=PA").andExpect(status().isOk())
 				.andExpect(content().contentType("application/json")).andReturn().getResponse()
 				.getContentAsString();
-		JSONObject feeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
-				.get("fee-clerk")).get(0);
-		assertEquals( "fee-clerk-fn fee-clerk-ln",feeClerk.get("bar_user_full_name"));
-		assertEquals( 1,feeClerk.get("count_of_payment_instruction_in_specified_status"));
+        UserInfo userInfoForFeeClerk = restActionsForFeeClerk.getUserInfoForRestAction();
+        JSONObject feeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
+            .get(userInfoForFeeClerk.getUid())).get(0);
+        assertEquals(userInfoForFeeClerk.getGivenName() + " " + userInfoForFeeClerk.getFamilyName(), feeClerk.get("bar_user_full_name"));
+        assertEquals(1, feeClerk.get("count_of_payment_instruction_in_specified_status"));
     }
 
     @Test
@@ -521,10 +523,11 @@ public class AllPayInstructionCrudComponentTest extends ComponentTestBase {
 		String jsonResponse = restActionsForDM.get("/users/pi-stats?status=A").andExpect(status().isOk())
 				.andExpect(content().contentType("application/json")).andReturn().getResponse()
 				.getContentAsString();
-		JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
-				.get("sr-fee-clerk")).get(0);
-		assertEquals( "sr-fee-clerk-fn sr-fee-clerk-ln",srFeeClerk.get("bar_user_full_name"));
-		assertEquals( 1,srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
+        UserInfo userInfoSrFeeClerk = restActionsForSrFeeClerk.getUserInfoForRestAction();
+        JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
+            .get(userInfoSrFeeClerk.getUid())).get(0);
+        assertEquals(userInfoSrFeeClerk.getGivenName() + " " + userInfoSrFeeClerk.getFamilyName(), srFeeClerk.get("bar_user_full_name"));
+        assertEquals(1, srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
     }
 
     @Test
@@ -617,10 +620,12 @@ public class AllPayInstructionCrudComponentTest extends ComponentTestBase {
 				.andExpect(status().isOk()).andExpect(content().contentType("application/json"))
 				.andReturn().getResponse().getContentAsString();
 		System.out.println(jsonResponse);
-		JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
-				.get("sr-fee-clerk")).get(0);
-		assertEquals( "sr-fee-clerk-fn sr-fee-clerk-ln",srFeeClerk.get("bar_user_full_name"));
-		assertEquals( 1,srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
+        UserInfo userInfoSrFeeClerk = restActionsForSrFeeClerk.getUserInfoForRestAction();
+        JSONObject srFeeClerk = (JSONObject) ((JSONArray) ((JSONObject) JSONParser.parseJSON(jsonResponse))
+            .get(userInfoSrFeeClerk.getUid())).get(0);
+
+        assertEquals(userInfoSrFeeClerk.getGivenName() + " " + userInfoSrFeeClerk.getFamilyName(), srFeeClerk.get("bar_user_full_name"));
+        assertEquals(1, srFeeClerk.get("count_of_payment_instruction_in_specified_status"));
     }
 
     @Test
