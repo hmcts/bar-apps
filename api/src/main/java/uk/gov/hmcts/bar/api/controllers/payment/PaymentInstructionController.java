@@ -634,6 +634,7 @@ public class PaymentInstructionController {
     @InitBinder
 	public void initBinder(final WebDataBinder webdataBinder) {
 		webdataBinder.registerCustomEditor(PaymentStatusEnum.class, new PaymentStatusEnumConverter());
+		
 	}
 
 }
