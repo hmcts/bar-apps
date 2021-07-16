@@ -21,6 +21,13 @@ You will need jdk and maven installed on your machine or use mvnw to install the
 
 You can run the tests using 'gradle test or ./gradlew test'
 
+## Run the application on IntelliJ
+1. Enable annotation processing under settings/compiler in development environment
+2. Setup a postgre database as details in application.properties and create login group for it. Set the username and password. Enable 'can login' under login group/privileges
+3. Check application.properties if the correct database name, username and password are present.
+4. Ensure that bar-idam-mock is already running and run the application:
+   https://github.com/hmcts/bar-idam-mock
+5. Open  http://localhost:8080/swagger-ui.html to check if the api is running.
 
 ## Deployment
 
