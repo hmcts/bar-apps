@@ -24,7 +24,7 @@ You can run the tests using 'gradle test or ./gradlew test'
 
 ## Deployment
 
-See Jenkinsfile for the deployment details
+See Jenkinsfile for the deployment details.
 
 ## Run the application
 To run the application at local developer machine use following command
