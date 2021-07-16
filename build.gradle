@@ -115,7 +115,7 @@ subprojects {
         }
         compile group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.4.11'
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: versions.springBoot
-        compileOnly 'org.projectlombok:lombok:1.16.16'
+        compileOnly 'org.projectlombok:lombok:1.18.20'
         compileOnly 'com.google.code.findbugs:annotations:3.0.1'
 
         testCompile 'junit:junit:4.12'
