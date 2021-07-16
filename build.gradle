@@ -50,7 +50,7 @@ allprojects {
                 entry 'jackson-databind'
             }
 
-            dependency 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.0'
+            dependency 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.4'
             dependency 'com.google.guava:guava:30.1-jre'
 
             dependency 'org.liquibase:liquibase-core:3.7.0'
