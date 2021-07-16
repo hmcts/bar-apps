@@ -45,7 +45,7 @@ allprojects {
 
             // solves CVE-2019-12086
             // remove once spring manager incorporates this changes
-            dependencySet(group: 'com.fasterxml.jackson.core', version: '2.10.1') {
+            dependencySet(group: 'com.fasterxml.jackson.core', version: '2.12.1') {
                 entry 'jackson-core'
                 entry 'jackson-databind'
             }
