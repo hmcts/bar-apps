@@ -1,0 +1,41 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.liquibase:liquibase-core
+    versions:
+    - 4.2.2
+    - 4.3.0
+    - 4.3.1
+    - 4.3.2
+    - 4.3.3
+  - dependency-name: com.gorylenko.gradle-git-properties
+    versions:
+    - 2.2.4
+    - 2.3.0
+  - dependency-name: org.postgresql:postgresql
+    versions:
+    - 42.2.18
+    - 42.2.19
+  - dependency-name: org.projectlombok:lombok
+    versions:
+    - 1.18.18
+  - dependency-name: com.fasterxml.jackson.datatype:jackson-datatype-jsr310
+    versions:
+    - 2.12.1
+    - 2.12.2
+  - dependency-name: org.springframework.boot
+    versions:
+    - 2.4.2
+    - 2.4.3
+    - 2.4.4
+  - dependency-name: commons-beanutils:commons-beanutils
+    versions:
+    - 1.9.4
+  - dependency-name: com.google.code.findbugs:annotations
+    versions:
+    - 3.0.1u2
