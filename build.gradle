@@ -118,7 +118,7 @@ subprojects {
         compileOnly 'org.projectlombok:lombok:1.16.16'
         compileOnly 'com.google.code.findbugs:annotations:3.0.1'
 
-        testCompile 'junit:junit:4.12'
+        testCompile 'junit:junit:4.13.2'
         testCompile 'org.assertj:assertj-core:3.8.0'
         testCompile 'com.tngtech.java:junit-dataprovider:1.13.1'
 
